@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"encoding/json"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
@@ -14,7 +14,7 @@ type Article struct {
 
 type Articles []Article
 
-func GetAllArticles(rw http.ResponseWriter, req *http.Request) {
+func GetAllArticles(c *gin.Context) {
 	articles := Articles{
 		Article{
 			Title:   "A1",
@@ -28,5 +28,5 @@ func GetAllArticles(rw http.ResponseWriter, req *http.Request) {
 		},
 	}
 	fmt.Println("All articles endpoint")
-	json.NewEncoder(rw).Encode(articles)
+	c.JSON(http.StatusOK, articles)
 }

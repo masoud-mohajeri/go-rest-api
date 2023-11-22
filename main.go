@@ -1,15 +1,15 @@
 package main
 
 import (
-	"log"
-	"net/http"
-
+	"github.com/gin-gonic/gin"
 	"github.com/mohajerimasoud/go-rest-api/controller"
+	"log"
 )
 
 func appRouter() {
-	http.HandleFunc("/articles", controller.GetAllArticles)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	router := gin.Default()
+	router.GET("/articles", controller.GetAllArticles)
+	log.Fatal(router.Run(":8080"))
 }
 
 func main() {
