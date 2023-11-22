@@ -9,6 +9,8 @@ import (
 func appRouter() {
 	router := gin.Default()
 	router.GET("/articles", controller.GetAllArticles)
+	router.POST("/articles", controller.CreateArticle)
+
 	log.Fatal(router.Run(":8080"))
 }
 
