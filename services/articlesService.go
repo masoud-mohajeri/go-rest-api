@@ -16,3 +16,12 @@ func FindAllArticles(repository repositories.ArticleRepository) dtos.Response {
 	return dtos.Response{Success: true, Data: data}
 
 }
+
+func SaveArticle(article *models.Article, repository repositories.ArticleRepository) dtos.Response {
+	queryResult := repository.Save(article)
+	if queryResult.Error != nil {
+		return dtos.Response{Success: false, Message: queryResult.Error.Error()}
+	}
+	// what is in result ???
+	return dtos.Response{Success: true, Data: queryResult.Result}
+}
