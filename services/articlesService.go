@@ -34,3 +34,13 @@ func SaveArticle(article *models.Article, repository repositories.ArticleReposit
 	// what is in result ???
 	return dtos.Response{Success: true, Data: queryResult.Result}
 }
+
+func DeleteArticle(id *string, repository repositories.ArticleRepository) dtos.Response {
+	queryResult := repository.DeleteArticleById(*id)
+
+	if queryResult.Error != nil {
+		return dtos.Response{Success: false, Message: queryResult.Error.Error()}
+	}
+
+	return dtos.Response{Success: true, Data: queryResult.Result}
+}

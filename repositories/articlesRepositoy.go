@@ -32,3 +32,13 @@ func (r *ArticleRepository) FindAll() RepositoryResult {
 	return RepositoryResult{Result: articles}
 
 }
+
+func (r *ArticleRepository) DeleteArticleById(id string) RepositoryResult {
+
+	err := r.db.Delete(&models.Article{ID: id})
+	if err != nil {
+		return RepositoryResult{Error: err.Error}
+	}
+	return RepositoryResult{Result: nil}
+
+}

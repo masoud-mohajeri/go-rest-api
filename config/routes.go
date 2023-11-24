@@ -11,9 +11,9 @@ import (
 
 func SetupRoutes(ArticlesRepository *repositories.ArticleRepository) *gin.Engine {
 
-	route := gin.Default()
+	router := gin.Default()
 
-	route.GET("/articles", func(context *gin.Context) {
+	router.GET("/articles", func(context *gin.Context) {
 		code := http.StatusOK
 		response := services.FindAllArticles(*ArticlesRepository)
 
@@ -24,7 +24,7 @@ func SetupRoutes(ArticlesRepository *repositories.ArticleRepository) *gin.Engine
 		context.JSON(code, response)
 	})
 
-	route.POST("/articles", func(context *gin.Context) {
+	router.POST("/articles", func(context *gin.Context) {
 		var article models.Article
 		err := context.ShouldBindJSON(&article)
 
@@ -46,6 +46,18 @@ func SetupRoutes(ArticlesRepository *repositories.ArticleRepository) *gin.Engine
 		context.JSON(code, response)
 	})
 
-	return route
+	router.DELETE("/articles/:id", func(context *gin.Context) {
+		id := context.Param("id")
+		code := http.StatusOK
+		response := services.DeleteArticle(&id, *ArticlesRepository)
+		if !response.Success {
+			code = http.StatusBadRequest
+			context.JSON(code, response.Message)
+			return
+		}
+		context.JSON(code, response.Message)
+	})
+
+	return router
 
 }
