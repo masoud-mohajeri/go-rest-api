@@ -1,9 +1,11 @@
 package services
 
 import (
+	"github.com/google/uuid"
 	"github.com/mohajerimasoud/go-rest-api/dtos"
 	"github.com/mohajerimasoud/go-rest-api/models"
 	"github.com/mohajerimasoud/go-rest-api/repositories"
+	"log"
 )
 
 func FindAllArticles(repository repositories.ArticleRepository) dtos.Response {
@@ -12,12 +14,19 @@ func FindAllArticles(repository repositories.ArticleRepository) dtos.Response {
 	if queryResult.Error != nil {
 		return dtos.Response{Success: false, Message: queryResult.Error.Error()}
 	}
-	data := queryResult.Result.(*models.Articles)
+	data := queryResult.Result.(models.Articles)
 	return dtos.Response{Success: true, Data: data}
 
 }
 
 func SaveArticle(article *models.Article, repository repositories.ArticleRepository) dtos.Response {
+	uuidResult, err := uuid.NewRandom()
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+	article.ID = uuidResult.String()
+
 	queryResult := repository.Save(article)
 	if queryResult.Error != nil {
 		return dtos.Response{Success: false, Message: queryResult.Error.Error()}

@@ -14,7 +14,7 @@ func NewArticleRepository(db *gorm.DB) *ArticleRepository {
 }
 
 func (r *ArticleRepository) Save(contact *models.Article) RepositoryResult {
-	err := r.db.Save(contact).Error
+	err := r.db.Create(contact).Error
 
 	if err != nil {
 		return RepositoryResult{Error: err}
@@ -25,7 +25,7 @@ func (r *ArticleRepository) Save(contact *models.Article) RepositoryResult {
 
 func (r *ArticleRepository) FindAll() RepositoryResult {
 	var articles models.Articles
-	err := r.db.Find(articles).Error
+	err := r.db.Find(&articles).Error
 	if err != nil {
 		return RepositoryResult{Error: err}
 	}

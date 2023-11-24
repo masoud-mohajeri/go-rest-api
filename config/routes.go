@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func setupRoutes(ArticlesRepository *repositories.ArticleRepository) {
+func SetupRoutes(ArticlesRepository *repositories.ArticleRepository) *gin.Engine {
 
 	route := gin.Default()
 
@@ -45,5 +45,7 @@ func setupRoutes(ArticlesRepository *repositories.ArticleRepository) {
 
 		context.JSON(code, response)
 	})
+
+	return route
 
 }
