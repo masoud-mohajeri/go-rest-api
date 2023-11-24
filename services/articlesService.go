@@ -19,6 +19,31 @@ func FindAllArticles(repository repositories.ArticleRepository) dtos.Response {
 
 }
 
+func UpdateArticleById(id *string, article models.Article, repository repositories.ArticleRepository) dtos.Response {
+	findingArticle := FindArticleById(id, repository)
+	if !findingArticle.Success {
+		return dtos.Response{Success: false, Message: findingArticle.Message}
+	}
+
+	updateResult := repository.UpdateArticle(*id, article)
+
+	if updateResult.Error != nil {
+		return dtos.Response{Success: false, Message: updateResult.Error.Error()}
+	}
+
+	return dtos.Response{Success: true}
+}
+
+func FindArticleById(id *string, repository repositories.ArticleRepository) dtos.Response {
+	queryResult := repository.FindById(*id)
+
+	if queryResult.Error != nil {
+		return dtos.Response{Success: false, Message: queryResult.Error.Error()}
+	}
+
+	return dtos.Response{Success: true, Data: queryResult.Result}
+}
+
 func SaveArticle(article *models.Article, repository repositories.ArticleRepository) dtos.Response {
 	uuidResult, err := uuid.NewRandom()
 

@@ -58,6 +58,45 @@ func SetupRoutes(ArticlesRepository *repositories.ArticleRepository) *gin.Engine
 		context.JSON(code, response.Message)
 	})
 
+	router.PUT("/articles/:id", func(context *gin.Context) {
+		id := context.Param("id")
+		code := http.StatusOK
+
+		var article models.Article
+		err := context.ShouldBindJSON(&article)
+
+		if err != nil {
+			code = http.StatusBadRequest
+			context.JSON(code, err.Error())
+			return
+		}
+
+		updateResult := services.UpdateArticleById(&id, article, *ArticlesRepository)
+		if !updateResult.Success {
+			code = http.StatusInternalServerError
+			context.JSON(code, updateResult.Message)
+			return
+		}
+
+		context.JSON(code, updateResult.Message)
+
+	})
+
+	router.GET("/articles/:id", func(context *gin.Context) {
+		id := context.Param("id")
+		code := http.StatusOK
+
+		articleSearchResult := services.FindArticleById(&id, *ArticlesRepository)
+
+		if !articleSearchResult.Success {
+			code := http.StatusNotFound
+			context.JSON(code, articleSearchResult.Message)
+			return
+		}
+
+		context.JSON(code, articleSearchResult.Data)
+	})
+
 	return router
 
 }

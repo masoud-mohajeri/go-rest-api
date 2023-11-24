@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"fmt"
 	"github.com/mohajerimasoud/go-rest-api/models"
 	"gorm.io/gorm"
 )
@@ -31,6 +32,31 @@ func (r *ArticleRepository) FindAll() RepositoryResult {
 	}
 	return RepositoryResult{Result: articles}
 
+}
+
+func (r *ArticleRepository) FindById(id string) RepositoryResult {
+	fmt.Printf("id in repo %s", id)
+	var article models.Article
+	err := r.db.Where(&models.Article{ID: id}).Take(&article).Error
+	fmt.Printf("article in repo %+v", article)
+
+	if err != nil {
+		return RepositoryResult{Error: err}
+	}
+	// TODO &article
+	return RepositoryResult{Result: &article}
+
+}
+
+// TODO: refrence instead of value
+func (r *ArticleRepository) UpdateArticle(id string, article models.Article) RepositoryResult {
+	article.ID = id
+	err := r.db.Updates(article)
+	if err != nil {
+		return RepositoryResult{Error: err.Error}
+	}
+
+	return RepositoryResult{Result: article}
 }
 
 func (r *ArticleRepository) DeleteArticleById(id string) RepositoryResult {
