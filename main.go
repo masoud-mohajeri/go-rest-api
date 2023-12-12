@@ -9,16 +9,15 @@ import (
 )
 
 func main() {
-	//appRouter()
 	// TODO: read values from env
-	db, err := database.ConnectToDB()
+	db, err := database.ConnectToDB("pg", "pass", "crud")
 
 	if err != nil {
 		// TODO: add logger
 		log.Fatalln(err)
 	}
 
-	// TODO: what auto migration do exactly(create tables ?)
+	// TODO: Migrate data
 	migrationError := db.AutoMigrate(&models.Article{})
 
 	if migrationError != nil {
@@ -27,6 +26,7 @@ func main() {
 	}
 	//TODO: Unresolved reference 'Close' - find alternative
 	//defer db.Close()
+
 	contactRepository := repositories.NewArticleRepository(db)
 
 	route := config.SetupRoutes(contactRepository)
