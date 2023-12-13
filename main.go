@@ -4,9 +4,14 @@ import (
 	"github.com/mohajerimasoud/go-rest-api/config"
 	"github.com/mohajerimasoud/go-rest-api/database"
 	"github.com/mohajerimasoud/go-rest-api/models"
-	"github.com/mohajerimasoud/go-rest-api/repositories"
+	"gorm.io/gorm"
 	"log"
 )
+
+func Migrate(db *gorm.DB) {
+	// TODO: handle error for all migrations with a good pattern
+	db.AutoMigrate(&models.Article{})
+}
 
 func main() {
 	// TODO: read values from env
@@ -17,19 +22,12 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	// TODO: Migrate data
-	migrationError := db.AutoMigrate(&models.Article{})
+	Migrate(db)
 
-	if migrationError != nil {
-		// TODO: add logger
-		log.Fatalln(err)
-	}
-	//TODO: Unresolved reference 'Close' - find alternative
-	//defer db.Close()
+	sqlDB, _ := db.DB()
+	defer sqlDB.Close()
 
-	contactRepository := repositories.NewArticleRepository(db)
-
-	route := config.SetupRoutes(contactRepository)
+	route := config.SetupRoutes(db)
 
 	log.Fatalln(route.Run(":8000"))
 }
