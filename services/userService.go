@@ -30,3 +30,11 @@ func SaveUser(user *models.User, repository *repositories.UsersRepository) dtos.
 
 	return dtos.Response{Success: true, Data: user}
 }
+
+func PromoteUser(id *string, repository *repositories.UsersRepository) dtos.Response {
+	result := repository.ChangeUserRole(id, models.Admin)
+	if result.Error != nil {
+		return dtos.Response{Success: false, Message: result.Error.Error()}
+	}
+	return dtos.Response{Success: true}
+}

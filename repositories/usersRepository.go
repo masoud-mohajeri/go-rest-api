@@ -24,3 +24,15 @@ func (u *UsersRepository) SaveUser(user *models.User) RepositoryResult {
 	return RepositoryResult{Result: user}
 
 }
+
+func (u *UsersRepository) ChangeUserRole(id *string, ut models.UserType) RepositoryResult {
+	user := &models.User{}
+	user.ID = *id
+	user.Role = ut
+	tx := u.db.Updates(user)
+	if tx.Error != nil {
+		return RepositoryResult{Error: tx.Error}
+	}
+
+	return RepositoryResult{Result: user}
+}
