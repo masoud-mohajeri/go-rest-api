@@ -9,7 +9,7 @@ import (
 )
 
 func FindAllArticles(repository repositories.ArticleRepository) dtos.Response {
-	queryResult := repository.FindAll()
+	queryResult := repository.FindAllArticles()
 
 	if queryResult.Error != nil {
 		return dtos.Response{Success: false, Message: queryResult.Error.Error()}
@@ -35,7 +35,7 @@ func UpdateArticleById(id *string, article models.Article, repository repositori
 }
 
 func FindArticleById(id *string, repository repositories.ArticleRepository) dtos.Response {
-	queryResult := repository.FindById(*id)
+	queryResult := repository.FindArticleById(*id)
 
 	if queryResult.Error != nil {
 		return dtos.Response{Success: false, Message: queryResult.Error.Error()}

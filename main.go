@@ -11,6 +11,7 @@ import (
 func Migrate(db *gorm.DB) {
 	// TODO: handle error for all migrations with a good pattern
 	db.AutoMigrate(&models.Article{})
+	db.AutoMigrate(&models.User{})
 }
 
 func main() {

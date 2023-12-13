@@ -13,6 +13,10 @@ func SetupRoutes(db *gorm.DB) *gin.Engine {
 	ArticlesRepository := repositories.NewArticleRepository(db)
 	ArticlesRoutes(ArticlesRouter, ArticlesRepository)
 
+	UsersRouter := router.Group("/user")
+	userRepository := repositories.NewUsersRepository(db)
+	UsersRoutes(UsersRouter, userRepository)
+
 	return router
 
 }

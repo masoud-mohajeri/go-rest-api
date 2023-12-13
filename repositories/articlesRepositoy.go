@@ -14,17 +14,17 @@ func NewArticleRepository(db *gorm.DB) *ArticleRepository {
 	return &ArticleRepository{db: db}
 }
 
-func (r *ArticleRepository) Save(contact *models.Article) RepositoryResult {
-	err := r.db.Create(contact).Error
+func (r *ArticleRepository) Save(Article *models.Article) RepositoryResult {
+	err := r.db.Create(Article).Error
 
 	if err != nil {
 		return RepositoryResult{Error: err}
 	}
 
-	return RepositoryResult{Result: contact}
+	return RepositoryResult{Result: Article}
 }
 
-func (r *ArticleRepository) FindAll() RepositoryResult {
+func (r *ArticleRepository) FindAllArticles() RepositoryResult {
 	var articles models.Articles
 	err := r.db.Find(&articles).Error
 	if err != nil {
@@ -34,7 +34,7 @@ func (r *ArticleRepository) FindAll() RepositoryResult {
 
 }
 
-func (r *ArticleRepository) FindById(id string) RepositoryResult {
+func (r *ArticleRepository) FindArticleById(id string) RepositoryResult {
 	fmt.Printf("id in repo %s", id)
 	var article models.Article
 	err := r.db.Where(&models.Article{ID: id}).Take(&article).Error
